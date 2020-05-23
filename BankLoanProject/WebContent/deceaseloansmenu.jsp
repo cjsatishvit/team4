@@ -12,6 +12,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+<form action ="updateBorrower"  method = "post">
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -58,7 +59,9 @@
 			<div class = "customDiv">  </div>
 		</div>
 		<div class = "col-md-10">
-			<a href="#"class = "btn btn-primary"> UPDATE BORROWER </a>		
+			
+			<input type = "Submit" name ="action" class = "btn btn-primary" value = "UPDATE BORROWER">
+			
 		</div>
 	</div>
 	<br>
@@ -82,5 +85,6 @@
 	<br>
 	
 </div>
+</form>
 </body>
 </html>
