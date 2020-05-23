@@ -10,6 +10,30 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <%@page import="java.sql.DriverManager"%>
+  <%@page import="java.sql.ResultSet"%>
+  <%@page import="java.sql.Statement"%>
+  <%@page import="java.sql.Connection"%>
+  <%@page import="java.sql.PreparedStatement"%>
+<%
+
+String driverName = "com.mysql.cj.jdbc.Driver";
+String connectionUrl = "jdbc:mysql://localhost/Bank";
+String userId = "root";
+String password = "saarthak1238";
+
+try {
+Class.forName(driverName);
+} catch (ClassNotFoundException e) {
+e.printStackTrace();
+}
+
+Connection connection = null;
+Statement statement = null;
+ResultSet resultSet = null;
+ResultSet resultSet2 = null;
+
+%>
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -37,52 +61,94 @@
 	<br>
 	<br>
 	<div class = "row">
-		<div class = "col-md-1">
+		<div class = "col-md-0">
 			<div class = "customDiv">  </div>
 		</div>
-		<div class = "col-md-11">
+		<div class = "col-md-12">
 			<div class = "table-responsive">
-				<table class = "table table-bordered table-hover" name = "lstatus">
+				<table class = "table table-bordered table-hover" name = "dstatus">
 					<thead>
 						<tr>
 							<th>Borrower Name</th>
 							<th>Borrower ID</th>
 							<th>Amount Borrowed</th>
+							<th>Amount Repaid</th>
 							<th>Decease Status</th>
+							<th>Date of Demise</th>
+							<th>Guarantor's ID</th>						
 							
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>Ram Sharma</td>
-							<td>123</td>
-							<td>5000000</td>
-							<td>DECEASED</td>
-						</tr>
-						<tr>
-							<td>John Jacobs</td>
-							<td>154</td>
-							<td>200000000</td>
-							<td>NOT DECEASED</td>
-						</tr>
-						<tr>
-							<td>Abdul Bari</td>
-							<td>768</td>
-							<td>1000000</td>
-							<td>DECEASED</td>
-						</tr>
-						<tr>
-							<td>Navjot Singh</td>
-							<td>988</td>
-							<td>1200000</td>
-							<td>NOT DECEASED</td>
-						</tr>
+						<%!
+						public String dstatus;
+						public String cellColor;
+						public String gid;
+						public String ddate;
+						public String gname;
+						%>
+						<%
+						try{ 
+						connection = DriverManager.getConnection(connectionUrl, userId, password);
+						statement=connection.createStatement();
+						String sql ="SELECT b.Name as Name, b.G_ID as G_ID, l.Repaid_Amount as Repaid_Amount, b.B_ID as B_ID, l.Borrowed_Amount as Borrowed_Amount, DATE_FORMAT(b.Date_of_demise, '%D %M %Y') as Date_of_demise FROM Borrower b, Loans l WHERE b.B_ID = l.B_ID";
+						
+						resultSet = statement.executeQuery(sql);
+						while(resultSet.next()){							
+						    ddate = resultSet.getString("Date_of_demise");
+							gid = resultSet.getString("G_ID");
+							
+					        //resultSet2 = statement.executeQuery("SELECT Name FROM Bank.Guarantor WHERE G_ID = "+gid);
+					        //gname = resultSet2.getString("Name");
+							
+							if(ddate!=null && gid!=null){
+								dstatus="Deceased";
+								cellColor="red";
+							}
+							else if(ddate==null)
+							{
+								ddate = "N/A";
+								dstatus = "Not Deceased";
+								cellColor="lightgreen";
+							}
+							else if(ddate!=null && gid==null)
+							{
+								dstatus = "Borrower Transfered";
+								cellColor = "lightblue";
+								gid = "N/A";
+								gname = "N/A";
+							}
+						%>
+							<tr bgcolor = '<%=cellColor%>'>
+							
+								<td><%=resultSet.getString("Name") %></td>
+								<td><%=resultSet.getString("B_ID") %></td>
+								<td><%=resultSet.getString("Borrowed_Amount") %></td>
+								<td><%=resultSet.getString("Repaid_Amount") %></td>								
+								<td><%=dstatus%></td>
+								<td><%=ddate%></td>
+								<td><%=gid %></td>
+								
+								
+							
+							</tr>
+						
+						<% 
+						}
+						
+						} catch (Exception e) {
+						e.printStackTrace();
+						}
+						%>
 					</tbody>
 				
 				</table>
 			</div>
 		</div>	
 	</div>
+	<br>
+	<br>
+	<br>
 	<br>
 	<br>
 	<br>
@@ -99,4 +165,6 @@
 	
 </div>
 </body>
+<% 
+%>
 </html>
