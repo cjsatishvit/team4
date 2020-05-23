@@ -1,5 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@page import="java.sql.DriverManager"%>
+    <%@page import="java.sql.ResultSet"%>
+    <%@page import="java.sql.Statement"%>
+    <%@page import="java.sql.Connection"%>
+<%
+
+String driverName = "com.mysql.cj.jdbc.Driver";
+String connectionUrl = "jdbc:mysql://localhost/Bank";
+String userId = "root";
+String password = "saarthak1238";
+
+try {
+Class.forName(driverName);
+} catch (ClassNotFoundException e) {
+e.printStackTrace();
+}
+
+Connection connection = null;
+Statement statement = null;
+ResultSet resultSet = null;
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,38 +67,55 @@
 				<table class = "table table-bordered table-hover" name = "lstatus">
 					<thead>
 						<tr>
-							<th>Total Installments</th>
+							<th>Loan ID</th>
 							<th>Borrower ID</th>
+							<th>Total Installments</th>							
 							<th>Amount Borrowed</th>
-							<th>Amout Repaid</th>
+							<th>Amount Repaid</th>
+							<th>Installments expected(Till Date)</th>
+							<th>Pending Repayment Amount</th>
+							<th>Demise Date</th>
 							
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>50</td>
-							<td>123</td>
-							<td>5000000</td>
-							<td>2000000</td>
-						</tr>
-						<tr>
-							<td>200</td>
-							<td>200000000</td>
-							<td>154</td>
-							<td>100000000</td>
-						</tr>
-						<tr>
-							<td>10</td>
-							<td>768</td>
-							<td>1000000</td>
-							<td>400000</td>
-						</tr>
-						<tr>
-							<td>12</td>
-							<td>988</td>
-							<td>1200000</td>
-							<td>300000</td>
-						</tr>
+						<%!
+							int daydiff;
+							int monthdiff;
+						%>
+						<%
+						try{ 
+						connection = DriverManager.getConnection(connectionUrl, userId, password);
+						statement=connection.createStatement();
+						String sql ="SELECT l.Loan_ID as Loan_ID, b.B_ID as B_ID,l.No_of_Installments as No_of_Installments, l.Borrowed_Amount as Borrowed_Amount, l.Repaid_Amount as Repaid_Amount, DATEDIFF(CURDATE(), l.Approval_Date) AS DateDiff, l.Borrowed_Amount-l.Repaid_Amount as Pending_Amount, DATE_FORMAT(b.Date_of_demise, '%D %M %Y') as Date_of_demise from Loans l, Borrower b WHERE l.B_ID=b.B_ID AND b.Date_of_Demise IS NOT NULL AND b.G_ID IS NULL";
+						
+						resultSet = statement.executeQuery(sql);
+						while(resultSet.next()){
+							daydiff =Integer.parseInt(resultSet.getString("DateDiff"));
+							monthdiff = (int)(daydiff/30);
+							
+						%>
+							<tr>
+							
+								<td><%=resultSet.getString("Loan_ID") %></td>
+								<td><%=resultSet.getString("B_ID") %></td>
+								<td><%=resultSet.getString("No_of_Installments") %></td>
+								<td><%=resultSet.getString("Borrowed_Amount")%></td>
+								<td><%=resultSet.getString("Repaid_Amount")%></td>
+								<td><%=Integer.toString(monthdiff)%></td>
+								<td><%=resultSet.getString("Pending_Amount")%></td>
+								<td><%=resultSet.getString("Date_of_demise")%></td>
+								
+							
+							</tr>
+						
+						<% 
+						}
+						
+						} catch (Exception e) {
+						e.printStackTrace();
+						}
+						%>
 					</tbody>
 				
 				</table>
