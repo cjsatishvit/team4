@@ -13,7 +13,7 @@
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	  <!-- Brand/logo -->
-	  <a class="navbar-brand">Header</a>
+	  <a class="navbar-brand">Reports/Statuses for Jewel and Credit</a>
 	  
 	  <!-- Links -->
 	 	<ul class="nav navbar-nav ml-auto">
