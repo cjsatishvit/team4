@@ -24,8 +24,8 @@ pageEncoding="ISO-8859-1"%>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="auctionPage.jsp">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="auctionPay.jsp">Payment</a>
+      <a class="nav-item nav-link active" href="index.jsp">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="pay.jsp">Payment</a>
       <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
       
     </div>

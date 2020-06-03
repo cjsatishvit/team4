@@ -1,3 +1,12 @@
+<%@page import="java.sql.*"%>
+<%@page import="java.io.*"%>  
+<%@page import="javax.servlet.annotation.WebServlet"%>
+<%@page import="javax.servlet.http.HttpServlet"%>
+<%@page import="javax.servlet.http.HttpServletRequest"%>
+<%@page import="javax.servlet.http.HttpServletResponse"%>
+<%@page import="javax.servlet.*"%>
+
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -29,11 +38,11 @@ pageEncoding="ISO-8859-1"%>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-item nav-link active" href="auctionPage.jsp"
+          <a class="nav-item nav-link active" href="index.jsp"
             >Home
             <span class="sr-only">(current)</span></a
           >
-          <a class="nav-item nav-link" href="auctionPay.jsp">Payment</a>
+          <a class="nav-item nav-link" href="pay.jsp">Payment</a>
           <a class="nav-item nav-link" href="#">Logout</a>
         </div>
       </div>
@@ -58,6 +67,40 @@ pageEncoding="ISO-8859-1"%>
                 <p class="card-text">
                   Base Price: <br />
                   Current Bid price:
+                  
+                  <%
+            Connection conn=null;
+            Statement st=null;
+            ResultSet rs=null;
+            int maxID = 0;
+
+            
+            try                {
+                    Class.forName( "com.mysql.jdbc.Driver");
+                    conn=(Connection)DriverManager.getConnection("jdbc:mysql://localhost:3306/auction?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+                    //st=conn.createStatement();
+                   
+                    
+                    //String qry="select * from auction where bid=MAX('bid')";
+                   // String qry = "SELECT MAX(bid) FROM auction";
+                    //rs=st.executeQuery(qry);
+                   
+                    Statement s2 = conn.createStatement();
+                    s2.execute("SELECT MAX(bid) FROM auction");    
+                    ResultSet rs2 = s2.getResultSet(); //
+                    
+                    if (rs2.next()) {
+                    	  maxID = rs2.getInt(1);
+                    	}
+        }
+             catch(Exception ex){
+             	 ex.printStackTrace(response.getWriter());
+
+             }
+         %>
+<%= maxID %>
+                  
+                  
                 </p>
                 <p class="card-text">
                   <medium class="text-muted"
@@ -66,7 +109,7 @@ pageEncoding="ISO-8859-1"%>
                   </medium>
                 </p>
                 <a
-                  href="#"
+                  href="form.jsp"
                   class="btn btn-dark btn-lg"
                   type="submit"
                   >BID</a
@@ -153,6 +196,27 @@ Weight:
                   Active Users
                 </h5>
                 <p class="card-text">lore</p>
+                Time Left:
+                <p id="demo"></p> 
+                
+                <script > 
+var deadline = new Date("Jun 3, 2020 19:37:25").getTime(); 
+var x = setInterval(function() { 
+var now = new Date().getTime(); 
+var t = deadline - now; 
+var days = Math.floor(t / (1000 * 60 * 60 * 24)); 
+var hours = Math.floor((t%(1000 * 60 * 60 * 24))/(1000 * 60 * 60)); 
+var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60)); 
+var seconds = Math.floor((t % (1000 * 60)) / 1000); 
+document.getElementById("demo").innerHTML = 
+hours + "h " + minutes + "m " + seconds + "s "; 
+    if (t < 0) { 
+        clearInterval(x); 
+        document.getElementById("demo").innerHTML = "EXPIRED"; 
+    } 
+}, 1000); 
+</script> 
+                
               </div>
             </div>
           </div>
