@@ -91,7 +91,7 @@ ResultSet resultSet2 = null;
 						try{ 
 						connection = DriverManager.getConnection(connectionUrl, userId, password);
 						statement=connection.createStatement();
-						String sql ="SELECT b.Name as Name, b.G_ID as G_ID, l.Repaid_Amount as Repaid_Amount, b.B_ID as B_ID, l.Borrowed_Amount as Borrowed_Amount, DATE_FORMAT(b.Date_of_demise, '%D %M %Y') as Date_of_demise FROM Borrower b, Loans l WHERE b.B_ID = l.B_ID";
+						String sql ="SELECT b.Name as Name, b.G_ID as G_ID, l.Repaid_Amount as Repaid_Amount, b.B_ID as B_ID, l.Borrowed_Amount as Borrowed_Amount, DATE_FORMAT(b.Date_of_demise, '%D %M %Y') as Date_of_demise FROM Borrower b, Loans l WHERE b.B_ID = l.B_ID AND l.Loan_Type ='Credit Card'";
 						
 						resultSet = statement.executeQuery(sql);
 						while(resultSet.next()){							
