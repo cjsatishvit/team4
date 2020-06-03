@@ -87,7 +87,7 @@ ResultSet resultSet = null;
 						try{ 
 						connection = DriverManager.getConnection(connectionUrl, userId, password);
 						statement=connection.createStatement();
-						String sql ="SELECT l.Loan_ID as Loan_ID, b.B_ID as B_ID,l.No_of_Installments as No_of_Installments, l.Borrowed_Amount as Borrowed_Amount, l.Repaid_Amount as Repaid_Amount, DATEDIFF(CURDATE(), l.Approval_Date) AS DateDiff, l.Borrowed_Amount-l.Repaid_Amount as Pending_Amount, DATE_FORMAT(b.Date_of_demise, '%D %M %Y') as Date_of_demise from Loans l, Borrower b WHERE l.B_ID=b.B_ID AND b.Date_of_Demise IS NOT NULL AND b.G_ID IS NULL";
+						String sql ="SELECT l.Loan_ID as Loan_ID, b.B_ID as B_ID,l.No_of_Installments as No_of_Installments, l.Borrowed_Amount as Borrowed_Amount, l.Repaid_Amount as Repaid_Amount, DATEDIFF(CURDATE(), l.Approval_Date) AS DateDiff, l.Borrowed_Amount-l.Repaid_Amount as Pending_Amount, DATE_FORMAT(b.Date_of_demise, '%D %M %Y') as Date_of_demise from Loans l, Borrower b WHERE l.B_ID=b.B_ID AND b.Date_of_Demise IS NOT NULL AND b.G_ID IS NULL AND l.Loan_Type ='Credit Card'";
 						
 						resultSet = statement.executeQuery(sql);
 						while(resultSet.next()){
