@@ -73,11 +73,11 @@ public class auctionservlet extends HttpServlet {
 	
 	private void listUser(HttpServletRequest request, HttpServletResponse response)
 		    throws SQLException, IOException, ServletException {
-		Map<String, Map<Jewels,Auction>> listUser = auctionDAO.selectAllUsers();
+		Map<String, Map<Jewels,Auction>> listitems = auctionDAO.selectAllitems();
 		Map<String, Map<Jewels,Auction>> listModal = auctionDAO.selectpresent();
 		Map<String,Map<String, Map<Jewels,Auction>>>  listTotal = new HashMap<String,Map<String, Map<Jewels,Auction>>>();
 		listTotal.put("listModal",listModal);
-		listTotal.put("listUser",listUser);
+		listTotal.put("listUser",listitems);
 		System.out.println("Listtotal");
 		System.out.println(listTotal);
 		        request.setAttribute("listTotal", listTotal);

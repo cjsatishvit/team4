@@ -124,7 +124,7 @@ public class AuctionDAO {
 	   * Return:        Map<String, Map<Jewels,Auction>>
 	   */
     
-    public Map<String, Map<Jewels,Auction>> selectAllUsers() {
+    public Map<String, Map<Jewels,Auction>> selectAllitems() {
     	
     	try {
     		Connection connection = getConnection();
