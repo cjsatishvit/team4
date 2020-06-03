@@ -56,7 +56,7 @@ public class updateBorrower extends HttpServlet {
 		      
 		      stmt = conn.createStatement();
 
-		      String sql = "Select G_ID, Name, ID_Proof, B_ID, Phone_no, Address from Borrower where Date_of_demise IS NOT NULL AND G_ID is NOT NULL";
+		      String sql = "Select G_ID, Name, ID_Proof, B_ID, Phone_no, Address from Borrower where Date_of_demise IS NOT NULL AND G_ID is NOT NULL AND l.Loan_Type ='Credit Card'";
 		      ResultSet rs = stmt.executeQuery(sql);
 		      //STEP 5: Extract data from result set
 		      Loan loan = new Loan();
