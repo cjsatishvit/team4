@@ -87,9 +87,14 @@
 		  <div class="form-group row">
 		    <label class="col-sm-2 col-form-label" for="aadhar"><b>Aadhar:</b></label>
 		    <div class="col-sm-10">
-		    	<input type="text" pattern = "^\d{4}\s\d{4}\s\d{4}$" class="form-control" name="aadhar" placeholder="Enter Aadhar Number in 0000 0000 0000 format" oninvalid="this.setCustomValidity('Incorrect Aadhar Number')" oninput="setCustomValidity('')" title = "Example: 0000 0000 0000" required>
+		    	<input type="text" pattern = "^\d{4}\s\d{4}\s\d{4}$" class="form-control" id ="aadhar" name="aadhar" placeholder="Enter Aadhar Number in 0000 0000 0000 format" oninvalid="this.setCustomValidity('Incorrect Aadhar Number')" oninput="setCustomValidity('')" title = "Example: 0000 0000 0000" required>
 		    </div>
 		  </div>
+		  <script>
+			document.getElementById('aadhar').addEventListener('input', function (e) {
+		  	e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
+			});
+		  </script>
 		  <div class="form-group row">
 		    <label class="col-sm-2 col-form-label" for="address"><b>Address:</b></label>
 		    <div class="col-sm-10">
@@ -99,7 +104,7 @@
 		  <div class="form-group row">
 		    <label class="col-sm-2 col-form-label" for="dob"><b>Date of Birth:</b></label>
 		    <div class="col-sm-10">
-		    	<input type="text" pattern = "^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/(19[0-8][0-9]|199[0-9]|20[01][0-9]|2020)$" class="form-control" name="dob" placeholder="Enter in  format mm/dd/yyyy " oninvalid="this.setCustomValidity('Incorrect date or format')" oninput="setCustomValidity('')" title = "Example: 01/02/2003"required>
+		    	<input type="text" pattern = "^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/(19[0-8][0-9]|199[0-9]|20[01][0-9]|2020)$" class="form-control" name="Dob" placeholder="Enter in  format mm/dd/yyyy " oninvalid="this.setCustomValidity('Incorrect date or format')" oninput="setCustomValidity('')" title = "Example: 01/02/2003"required>
 		    </div>
 		  </div>
 		  <!-- Buttons -->
