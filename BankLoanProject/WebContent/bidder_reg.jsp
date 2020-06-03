@@ -104,7 +104,7 @@
 		  <div class="form-group row">
 		    <label class="col-sm-2 col-form-label" for="dob"><b>Date of Birth:</b></label>
 		    <div class="col-sm-10">
-		    	<input type="text" pattern = "^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/(19[0-8][0-9]|199[0-9]|20[01][0-9]|2020)$" class="form-control" name="Dob" placeholder="Enter in  format mm/dd/yyyy " oninvalid="this.setCustomValidity('Incorrect date or format')" oninput="setCustomValidity('')" title = "Example: 01/02/2003"required>
+		    	<input type="text" pattern = "^(3[01]|[12][0-9]|0[1-9])/(1[0-2]|0[1-9])/(19[0-8][0-9]|199[0-9]|20[01][0-9]|2020)$" class="form-control" name="Dob" placeholder="Enter in  format dd/MM/yyyy " oninvalid="this.setCustomValidity('Incorrect date or format')" oninput="setCustomValidity('')" title = "Example: 01/02/2003"required>
 		    </div>
 		  </div>
 		  <!-- Buttons -->
