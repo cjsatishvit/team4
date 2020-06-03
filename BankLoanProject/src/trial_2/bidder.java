@@ -17,7 +17,7 @@ public class bidder {
 	private String Fname;
 	private String Lname;
 	private String Bidder_ID;
-	private String Password;
+	private String Address;
 	private String Phone_no;
 	private String PAN;
 	private String DOB;
@@ -25,13 +25,13 @@ public class bidder {
 	private String Reg_bidder;
 
 	//Constructors
-	public bidder(String fname, String lname, String bidder_ID, String password, String phone_no, String pAN,
+	public bidder(String fname, String lname, String bidder_ID, String address, String phone_no, String pAN,
 			String dOB, String aadhar) {
 		super();
 		Fname = fname;
 		Lname = lname;
 		Bidder_ID = bidder_ID;
-		Password = password;
+		Address = address;
 		Phone_no = phone_no;
 		PAN = pAN;
 		DOB = dOB;
@@ -48,8 +48,8 @@ public class bidder {
 	public String getBidder_ID() {
 		return Bidder_ID;
 	}
-	public String getPassword() {
-		return Password;
+	public String getAddress() {
+		return Address;
 	}
 	public String getPhone_no() {
 		return Phone_no;

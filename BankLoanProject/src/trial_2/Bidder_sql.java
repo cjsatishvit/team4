@@ -56,7 +56,7 @@ public class Bidder_sql {
 	      
 	      
 	      String sql = "INSERT INTO bidder " +
-                  "VALUES ('"+x.getBidder_ID() + "', '"+ x.getFname() + "', '"+ x.getLname() + "', '"+x.getPhone_no() +"', '"+x.getPassword() +"', '"+x.getPAN() +"', '"+x.getAadhar() +"', '"+ x.getDOB() +"', '"+ cur_date +"')";
+                  "VALUES ('"+x.getBidder_ID() + "', '"+ x.getFname() + "', '"+ x.getLname() + "', '"+x.getPhone_no() +"', '"+x.getAddress() +"', '"+x.getPAN() +"', '"+x.getAadhar() +"', '"+ x.getDOB() +"', '"+ cur_date +"')";
 			
 	      stmt.executeUpdate(sql);
 	      System.out.println("Inserted records into the table...");
