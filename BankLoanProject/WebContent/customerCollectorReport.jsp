@@ -15,6 +15,11 @@
 </head>
 <body>
 	<%
+		if(session.getAttribute("username")==null){
+			response.sendRedirect("login.jsp");
+		}
+	%>
+	<%
 	response.setHeader("Cache-control","no-cache, no-store, must-revalidate");
 	response.setHeader("Pragma","no-cache");
 	response.setHeader("Expires","0");
@@ -75,7 +80,7 @@
 			else{
 				String url="jdbc:mysql://localhost:3306/bankproject";
 				String userName="root";
-				String pwd="xxxxxxx";
+				String pwd="xxxxxx";
 				String to=request.getParameter("to");
 				String fromDate=request.getParameter("from");
 				String cName=request.getParameter("cName");
