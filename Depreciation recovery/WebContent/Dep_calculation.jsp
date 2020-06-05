@@ -2,19 +2,20 @@
     pageEncoding="ISO-8859-1" %>
  <%
 <sql:query var="stockresult" scope="request" dataSource="com.mysql.jdbc.Driver">
-   SELECT stock <!-- select the current stock -->
-   FROM stocklevels
-   WHERE productID = $param.productID
+   SELECT base_value <!-- select the current stock -->
+   FROM Auction
+   WHERE productID = $productID
 </sql:query>
 
 <!-- calculate the new value from the first row of the query result -->
-<c:set var"newstocklevel" value="${stockresult.rows[0].stock - orderqty}"/> 
+
+<c:set var"newstocklevel" value="${Auction_value.rows[0].price - base_value}"/> 
 
 
 <sql:update var="newstock" scope="request" dataSource="com.mysql.jdbc.Driver">
-   UPDATE stocklevels
-   SET stock=$newstocklevel
-   WHERE productID = $param.productID
+   UPDATE Auction
+   SET stock=$Dep_value
+   WHERE productID = $productID
 </sql:query>
 %>
 
