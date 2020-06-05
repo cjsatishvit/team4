@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1" %>
  <%
 <sql:query var="stockresult" scope="request" dataSource="com.mysql.jdbc.Driver">
-   SELECT base_value <!-- select the current stock -->
+   SELECT base_value <!-- select the Base Value -->
    FROM Auction
    WHERE productID = $productID
 </sql:query>
