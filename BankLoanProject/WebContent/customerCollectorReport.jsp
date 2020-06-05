@@ -6,6 +6,12 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<style type="text/css">
+	.jumbotron{
+	min-height: 200 px;
+	padding:1rem;
+	}
+</style>
 </head>
 <body>
 	<%
@@ -32,24 +38,51 @@
 				</div>
 				<br><br>
 				<div class="form-row">
-					<div class="form-group col-md-1 float-right"></div>
-					<div class="form-group col-md-4 float-right">
-						From: <input type="date" class="datepicker" data-date-format="mm/dd/yyyy" name="from">
+					<div class="col-md-4">
+						<div class="jumbotron">
+							<div class="container" >
+								<p class="lead">Collector Name</p>
+								<hr class="my-4">
+								<input type="text" name="cName" class="form-control">
+							</div>
+						</div>
 					</div>
-					<div class="form-group col-md-4 float-right">
-						To: <input type="date" class="datepicker" data-date-format="mm/dd/yyyy" name="to">
-					</div>
-					<div class="form-group col-md-3 float-right">
-						<button type="submit" class="btn btn-dark">Generate Report</button>
+					<div class="col-md-6">
+						<div class="row">
+							<div class="form-group col-md-1"></div>
+							<div class="form-group col-md-4 float-right">
+								From: <input type="date" class="datepicker" data-date-format="mm/dd/yyyy" name="from">
+							</div>
+							<div class="form-group col-md-4 float-right">
+								To: <input type="date" class="datepicker" data-date-format="mm/dd/yyyy" name="to">
+							</div>
+						</div>
+						<div class="form-row"></div>
+						<div class="row">
+							<div class="col-4"></div>
+							<div class="form-row"></div>
+							<button type="submit" class="btn btn-dark">Generate Report</button>
+						</div>
 					</div>
 				</div>
+				
 			</form>
 		</div>
 
 		<% 
 			String s=request.getParameter("options");
 			if(s==null) System.out.println("Select some option");
-			else if(s.equals("1")){
+			else{
+				String url="jdbc:mysql://localhost:3306/bankproject";
+				String userName="root";
+				String pwd="xxxxxxx";
+				String to=request.getParameter("to");
+				String fromDate=request.getParameter("from");
+				String cName=request.getParameter("cName");
+				if(fromDate.equals("")) fromDate="1999-03-03";
+				if(to.equals("")) to="2030-03-03";
+				 if(s.equals("1")){
+				String sql="select borrowed_amount/no_of_installments as amount_collected,date_of_payment,(select name from borrower where borrower.b_id=loans.b_id) as customer,loans.b_id, collector_id, (select name from collector where collector.collector_id=loans.collector_id) as collector_name from installments left join loans on loans.loan_id=installments.loan_id where date_of_payment>\'"+fromDate+"\' and date_of_payment<\'"+to+"\' having collector_name like \'%"+cName+"%\' order by amount_paid desc;";
 		%>
 		<table class="table">
 		  <thead class="thead-dark">
@@ -57,20 +90,39 @@
 		      <th scope="col">#</th>
 		      <th scope="col">Amount Collected</th>
 		      <th scope="col">Date</th>
-		      <th scope="col">Customer Name</th>
+		      <th scope="col">Customer</th>
+		      <th scope="col">Customer ID</th>
+		      <th scope="col">Collector</th>
+		      <th scope="col">Collector ID</th>
 		    </tr>
 		  </thead>
 		  <tbody>
-		  
+		  <%@page import="java.sql.*" %>
+		  <%
+		  try{
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection con=DriverManager.getConnection(url,userName,pwd);
+				PreparedStatement st=con.prepareStatement(sql);
+				ResultSet rs=st.executeQuery();int i=1;
+	 			while(rs.next()){
+		  			out.println("<tr> <th scope=\"row\">"+i+"</th>");
+		  			out.println("<td>"+rs.getDouble(1) +"</td>");
+		  			out.println("<td>"+rs.getDate(2) +"</td>");
+		  			out.println("<td>"+rs.getString(3) +"</td>");
+		  			out.println("<td>"+rs.getString(4) +"</td>");
+		  			out.println("<td>"+rs.getString(5) +"</td>");
+		  			out.println("<td>"+rs.getString(6) +"</td>");
+		  			out.println("</tr");
+		  			i++;
+	 			}
+	 			con.close();
+	  		}catch(Exception e){System.out.println(e);}}
+		  %>
 		  </tbody>
 		 </table>
 		<%
-			}else if(s.equals("2")){
-				String fromDate=request.getParameter("from");
-				String toDate=request.getParameter("to");
-				String sql="select sum(borrowed_amount/no_of_installments) as amount_collected, collector_id, (select name from collector where collector.collector_id=loans.collector_id) as collector_name from installments left join loans on loans.loan_id=installments.loan_id where loan_type=\"jewel\" group by collector_id order by amount_paid desc";
-		 		String username="root";
-		 		String pwd="xxxxxxx";
+		if(s.equals("2")){
+				String sql="select sum(borrowed_amount/no_of_installments) as amount_collected, collector_id, (select name from collector where collector.collector_id=loans.collector_id) as collector_name from installments left join loans on loans.loan_id=installments.loan_id where loan_type=\"jewel\" group by collector_id having collector_name like \'%"+cName+"%\' order by amount_paid desc";
 		 %>
 		<table class="table">
 		  <thead class="thead-dark">
@@ -85,7 +137,7 @@
 		<%@page import="java.sql.*" %>
 		  <%    try{
 				Class.forName("com.mysql.jdbc.Driver");
-				Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/bankproject","root",pwd);
+				Connection con=DriverManager.getConnection(url,userName,pwd);
 				PreparedStatement st=con.prepareStatement(sql);
 				ResultSet rs=st.executeQuery();int i=1;
 	 			while(rs.next()){
@@ -96,18 +148,15 @@
 		  			out.println("</tr");
 		  			i++;
 	 			}
+	 			con.close();
+	  		}catch(Exception e){System.out.println(e);}}
 		  	%> 
 		  	</tbody>
 		  	</table>
 		 
-		<% 		con.close();
-		  		}catch(Exception e){System.out.println(e);}
-			}else if(s.equals("3")){
-				String fromDate=request.getParameter("from");
-				String toDate=request.getParameter("to");
-				String sql="select sum(borrowed_amount/no_of_installments) as amount_collected, collector_id, (select name from collector where collector.collector_id=loans.collector_id) as collector_name from installments left join loans on loans.loan_id=installments.loan_id where loan_type=\"cc\" group by collector_id order by amount_paid desc";
-		 		String username="root";
-		 		String pwd="xxxxxxxx";
+		<% 
+			if(s.equals("3")){
+				String sql="select sum(borrowed_amount/no_of_installments) as amount_collected, collector_id, (select name from collector where collector.collector_id=loans.collector_id) as collector_name from installments left join loans on loans.loan_id=installments.loan_id where loan_type=\"cc\" group by collector_id having collector_name like \'%"+cName+"%\' order by amount_paid desc";
 		 %>
 		 <table class="table">
 		  <thead class="thead-dark">
@@ -122,7 +171,7 @@
 		<%@page import="java.sql.*" %>
 		  <%    try{
 				Class.forName("com.mysql.jdbc.Driver");
-				Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/bankproject","root",pwd);
+				Connection con=DriverManager.getConnection(url,userName,pwd);
 				PreparedStatement st=con.prepareStatement(sql);
 				ResultSet rs=st.executeQuery();int i=1;
 	 			while(rs.next()){
@@ -133,13 +182,12 @@
 		  			out.println("</tr");
 		  			i++;
 	 			}
+	 			 con.close();
+	  		}catch(Exception e){System.out.println(e);}
 		  	%> 
 		  	</tbody>
 		  	</table>
-		
-		 <% con.close();
-	  		}catch(Exception e){System.out.println(e);}
-		  } %>
+		<% }} %>
 	</div>
-</body>
+	</body>
 </html>
